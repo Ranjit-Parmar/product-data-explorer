@@ -1,0 +1,85 @@
+# NAVIGATIONS
+# Get All Navigation
+http://localhost:3000/navigation
+
+
+### Create Navigation
+POST http://localhost:3000/navigation
+Content-Type: application/json
+
+{
+  "title": "new",
+  "slug": "hello"
+} 
+
+### Refresh Navigation
+POST http://localhost:3000/navigation/refresh
+
+
+
+# CATEGORIES
+
+### create category
+POST http://localhost:3000/navigation/44/categories
+Content-Type: application/json
+
+{
+  "title": "Doremon",
+  "slug": "hello"
+}
+
+### Fiction + its children (Fantasy, Adventure)
+http://localhost:3000/categories/fiction
+
+### top-level categories of navigation 1
+http://localhost:3000/categories/navigation/1
+
+
+# PRODUCTS
+### Get Products by Category (categoryId = 1)
+http://localhost:3000/categories/1/products?limit=10&page=1
+
+
+### Refresh Products for Category
+http://localhost:3000/products/category/2
+
+
+### Get Product Detail (productId = 1)
+http://localhost:3000/products/1
+
+
+###
+http://localhost:3000/product-detail/1
+
+
+### Reviews
+http://localhost:3000/reviews/product/1
+
+
+### Scrap Job
+http://localhost:3000/scrape-jobs
+
+
+### Scrap Job by id
+http://localhost:3000/scrape-jobs/1
+
+# VIEW HISTORY
+### Save View History
+POST http://localhost:3000/view-history
+Content-Type: application/json
+
+{
+  "message": "History saved",
+  "data": {
+    "sessionId": "session_123",
+    "path": "/products/1"
+  }
+}
+
+
+### Save View History
+http://localhost:3000/view-history
+
+
+### Get View History
+GET http://localhost:3000/view-history?sessionId=abc123
