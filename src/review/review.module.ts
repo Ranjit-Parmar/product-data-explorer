@@ -1,9 +1,35 @@
+// import { Module } from '@nestjs/common';
+// import { TypeOrmModule } from '@nestjs/typeorm';
+// import { Review } from './review.entity';
+// import { ReviewService } from './review.service';
+// import { ReviewController } from './review.controller';
+
+// @Module({
+//   imports: [TypeOrmModule.forFeature([Review])],
+//   providers: [ReviewService],
+//   controllers: [ReviewController],
+//   exports: [ReviewService],
+// })
+// export class ReviewModule {}
+
+
+
+
+
+
+
+
+
 import { Module } from '@nestjs/common';
-import { ReviewController } from './review.controller';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { Review } from './review.entity';
 import { ReviewService } from './review.service';
+import { ReviewController } from './review.controller';
 
 @Module({
+  imports: [TypeOrmModule.forFeature([Review])],
+  providers: [ReviewService],
   controllers: [ReviewController],
-  providers: [ReviewService]
+  exports: [ReviewService],
 })
 export class ReviewModule {}

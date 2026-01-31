@@ -1,18 +1,16 @@
-import { Controller, Get, Param, Post } from "@nestjs/common";
-import { ScrapeJobService } from "./scrape-job.service";
+import { Controller, Post, Body } from '@nestjs/common';
+import { ScrapeJobService } from './scrape-job.service';
+import { ScrapeTargetType } from './scrape-job.types';
 
-@Controller('scrape-jobs')
+@Controller('scrape')
 export class ScrapeJobController {
-  constructor(private readonly jobService: ScrapeJobService) {}
+  constructor(private readonly scrapeJobService: ScrapeJobService) {}
 
-  @Get()
-  findAll() { return this.jobService.findAll(); }
-
-  @Get(':id')
-  findOne(@Param('id') id: number) { return this.jobService.findOne(+id); }
-
-  @Post('refresh')
-  refreshScrapeJob(){
-   return this.jobService.refresh()
+  @Post('navigation')
+  enqueueNavigation(@Body('url') url: string) {
+    return this.scrapeJobService.enqueue({
+      targetUrl: url,
+      targetType: ScrapeTargetType.NAVIGATION,
+    });
   }
 }

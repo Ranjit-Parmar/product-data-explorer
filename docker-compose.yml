@@ -1,5 +1,3 @@
-
-
 services:
   postgres:
     image: postgres:15
@@ -33,7 +31,8 @@ services:
     volumes:
       - .:/usr/src/app
       - /usr/src/app/node_modules
-    command: sh -c "./wait-for-postgres.sh postgres ts-node src/seed.ts && npm run start:dev"
+    command: >
+      sh -c "./wait-for-postgres.sh postgres ts-node src/seed/seed.ts && npm run start:dev"
 
 volumes:
   pgdata:

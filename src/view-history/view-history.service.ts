@@ -1,15 +1,51 @@
-import { Injectable } from "@nestjs/common";
+// import { Injectable } from '@nestjs/common';
+// import { InjectRepository } from '@nestjs/typeorm';
+// import { Repository } from 'typeorm';
+// import { ViewHistory } from './view-history.entity';
+
+// @Injectable()
+// export class ViewHistoryService {
+//   constructor(
+//     @InjectRepository(ViewHistory)
+//     private viewHistoryRepo: Repository<ViewHistory>,
+//   ) {}
+
+//   create(userId: number | undefined, sessionId: string, pathJson: any) {
+//     const view = this.viewHistoryRepo.create({ userId, sessionId, pathJson });
+//     return this.viewHistoryRepo.save(view);
+//   }
+
+//   findBySession(sessionId: string) {
+//     return this.viewHistoryRepo.find({ where: { sessionId } });
+//   }
+// }
+
+
+
+
+
+
+
+
+
+import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { ViewHistory } from './view-history.entity';
 
 @Injectable()
 export class ViewHistoryService {
-  private history = [
-    { id: 1, sessionId: 'abc123', pathJson: ['/navigation/books','/categories/fiction'], createdAt: new Date() },
-  ];
+  constructor(
+    @InjectRepository(ViewHistory)
+    private readonly historyRepo: Repository<ViewHistory>,
+  ) {}
 
-  findAll() { return this.history; }
-  create(view: any) { 
-    const newView = { id: this.history.length + 1, createdAt: new Date(), ...view };
-    this.history.push(newView);
-    return newView;
+  create(history: Partial<ViewHistory>) {
+    return this.historyRepo.save(history);
+  }
+
+  findAll() {
+    return this.historyRepo.find();
   }
 }
+

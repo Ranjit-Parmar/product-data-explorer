@@ -1,14 +1,14 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany, OneToOne, JoinColumn } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToOne, OneToMany, JoinColumn } from 'typeorm';
 import { Category } from '../category/category.entity';
 import { ProductDetail } from '../product-detail/product-detail.entity';
 import { Review } from '../review/review.entity';
 
-@Entity('product')
+@Entity()
 export class Product {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({ unique: true })
   sourceId: string;
 
   @Column()
@@ -17,28 +17,25 @@ export class Product {
   @Column('decimal')
   price: number;
 
-  @Column({ default: 'GBP' })
+  @Column()
   currency: string;
 
-  @Column()
-  imageUrl: string;
+  @Column({ type: 'text', nullable: true })
+  imageUrl?: string | null;
 
-  @Column()
+  @Column({ unique: true })
   sourceUrl: string;
 
-  @Column({ type: 'timestamp', nullable: true })
+  @Column({ type: 'timestamptz', nullable: true })
   lastScrapedAt: Date;
 
-  @ManyToOne(() => Category, category => category.products)
-  @JoinColumn({ name: 'categoryId' })
+  @ManyToOne(() => Category, cat => cat.products, { nullable: false })
   category: Category;
 
-  @Column()
-  categoryId: number;
-
-  @OneToMany(() => Review, review => review.product)
-  reviews: Review[];
-
   @OneToOne(() => ProductDetail, detail => detail.product, { cascade: true })
+  @JoinColumn()
   detail: ProductDetail;
+
+  @OneToMany(() => Review, review => review.product, { cascade: true })
+  reviews: Review[];
 }

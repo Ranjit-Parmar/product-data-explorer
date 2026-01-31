@@ -1,24 +1,23 @@
-import { Entity, Column, OneToOne, PrimaryColumn, JoinColumn } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, OneToOne } from 'typeorm';
 import { Product } from '../product/product.entity';
 
-@Entity('product_detail')
+@Entity()
 export class ProductDetail {
-  @PrimaryColumn()
-  productId: number;
+  @PrimaryGeneratedColumn()
+  id: number;
 
-  @OneToOne(() => Product, product => product.detail)
-  @JoinColumn({ name: 'productId' })
-  product: Product;
-
-  @Column({ type: 'text', nullable: true })
+  @Column('text')
   description: string;
 
-  @Column({ type: 'jsonb', nullable: true })
+  @Column('json', { nullable: true })
   specs: Record<string, any>;
 
-  @Column({ type: 'float', nullable: true })
+  @Column('decimal', { nullable: true })
   ratingsAvg: number;
 
   @Column({ nullable: true })
   reviewsCount: number;
+
+  @OneToOne(() => Product, product => product.detail)
+  product: Product; // inverse side
 }

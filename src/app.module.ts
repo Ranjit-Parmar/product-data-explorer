@@ -9,6 +9,8 @@ import { ReviewModule } from './review/review.module';
 import { ScrapeJobModule } from './scrape-job/scrape-job.module';
 import { ViewHistoryModule } from './view-history/view-history.module';
 
+import { ScraperModule } from './scraper/scraper.module';
+
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
@@ -22,6 +24,10 @@ import { ViewHistoryModule } from './view-history/view-history.module';
       autoLoadEntities: true,
       synchronize: true,
     }),
+
+    // 🔥 IMPORTANT
+    ScraperModule,
+
     NavigationModule,
     CategoryModule,
     ProductModule,
@@ -32,3 +38,4 @@ import { ViewHistoryModule } from './view-history/view-history.module';
   ],
 })
 export class AppModule {}
+

@@ -1,33 +1,23 @@
-// // src/category/category.controller.ts
-// import { Controller, Get, Post, Param, Body } from '@nestjs/common';
+// import { Controller, Get, Post, Body, Param, ParseIntPipe } from '@nestjs/common';
 // import { CategoryService } from './category.service';
 
-import { Controller, Get, Param, Post } from "@nestjs/common";
-import { CategoryService } from "./category.service";
-
-// @Controller('navigation/:navigationId/categories')
+// @Controller('category')
 // export class CategoryController {
-//   constructor(private readonly categoryService: CategoryService) {}
+//   constructor(private catService: CategoryService) {}
 
-//   // ✅ GET categories by navigation
 //   @Get()
-//   findByNavigation(@Param('navigationId') navigationId: string) {
-//     return this.categoryService.findByNavigation(Number(navigationId));
+//   findAll() {
+//     return this.catService.findAll();
 //   }
 
-//   // ✅ POST create category under a navigation
+//   @Get(':id')
+//   findOne(@Param('id', ParseIntPipe) id: number) {
+//     return this.catService.findOne(id);
+//   }
+
 //   @Post()
-//   create(
-//     @Param('navigationId') navigationId: string,
-//     @Body() body: { title: string; slug: string },
-//   ) {
-//     return this.categoryService.create(Number(navigationId), body);
-//   }
-
-//   // ✅ POST refresh categories under a navigation
-//   @Post('/refresh')
-//   refresh(@Param('navigationId') navigationId: string) {
-//     return this.categoryService.refresh(Number(navigationId));
+//   create(@Body() body: { title: string; slug: string; navigationId: number; parentId?: number }) {
+//     return this.catService.create(body.title, body.slug, body.navigationId, body.parentId);
 //   }
 // }
 
@@ -39,44 +29,20 @@ import { CategoryService } from "./category.service";
 
 
 
-
-
-
-
-
-
-
+import { Controller, Get, Param } from '@nestjs/common';
+import { CategoryService } from './category.service';
 
 @Controller('categories')
 export class CategoryController {
-  constructor(private readonly categoryService: CategoryService) {}
-
-  @Get('navigation/:navigationId')
-  getCategoriesByNavigation(@Param('navigationId') navigationId: number) {
-    return this.categoryService.findByNavigation(+navigationId);
-  }
-
-  @Get(':slug')
-  getCategory(@Param('slug') slug: string) {
-    const category = this.categoryService.findOne(slug);
-    if (!category) return { error: 'Category not found' };
-    category['children'] = this.categoryService.findChildren(category.id);
-    return category;
-  }
+  constructor(private readonly catService: CategoryService) {}
 
   @Get()
-  findAll(){
-    return this.categoryService.findAll()
+  getAll() {
+    return this.catService.findAll();
   }
 
-  @Get(':slug')
-  findOne(@Param('slug') slug: string){
-    return this.categoryService.findOne(slug)
-  }
-
-  @Post('/:navigationId/refresh')
-  refresh(@Param('navigationId') navigationId: string) {
-    return this.categoryService.refresh(Number(navigationId));
+  @Get('navigation/:navId')
+  getByNavigation(@Param('navId') navId: string) {
+    return this.catService.findByNavigation(+navId);
   }
 }
-

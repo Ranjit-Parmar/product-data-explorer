@@ -2,37 +2,44 @@
 // import { InjectRepository } from '@nestjs/typeorm';
 // import { Repository } from 'typeorm';
 // import { Product } from './product.entity';
-
-import { Injectable } from "@nestjs/common";
+// import { ProductDetail } from '../product-detail/product-detail.entity';
+// import { Review } from '../review/review.entity';
 
 // @Injectable()
 // export class ProductService {
 //   constructor(
-//     @InjectRepository(Product)
-//     private repo: Repository<Product>,
+//     @InjectRepository(Product) private productRepo: Repository<Product>,
+//     @InjectRepository(ProductDetail) private detailRepo: Repository<ProductDetail>,
+//     @InjectRepository(Review) private reviewRepo: Repository<Review>,
 //   ) {}
 
-//   findByCategory(categoryId: number, limit: number, page: number) {
-//     return this.repo.find({
-//       where: { category: { id: categoryId } },
-//       take: limit,
-//       skip: (page - 1) * limit,
+//   findAll(): Promise<Product[]> {
+//     return this.productRepo.find({ relations: ['category', 'detail', 'reviews'] });
+//   }
+
+//   findOne(id: number): Promise<Product | null> {
+//     return this.productRepo.findOne({ where: { id }, relations: ['category', 'detail', 'reviews'] });
+//   }
+
+//   async create(data: {
+//     title: string;
+//     sourceId: string;
+//     price: number;
+//     currency: string;
+//     imageUrl: string;
+//     sourceUrl: string;
+//     lastScrapedAt?: Date;
+//     category: { id: number };
+//     detail?: Partial<ProductDetail>;
+//     reviews?: Partial<Review>[];
+//   }): Promise<Product> {
+//     const product = this.productRepo.create({
+//       ...data,
+//       detail: data.detail ? this.detailRepo.create(data.detail) : undefined,
+//       reviews: data.reviews ? data.reviews.map(r => this.reviewRepo.create(r)) : [],
 //     });
-//   }
 
-//   findOne(id: number) {
-//     return this.repo.findOne({
-//       where: { id },
-//       relations: ['detail', 'reviews'],
-//     });
-//   }
-
-//   refreshCategory(categoryId: number) {
-//     return { message: `Refresh products for category ${categoryId}` };
-//   }
-
-//   refreshProduct(productId: number) {
-//     return { message: `Refresh product ${productId}` };
+//     return this.productRepo.save(product);
 //   }
 // }
 
@@ -41,22 +48,29 @@ import { Injectable } from "@nestjs/common";
 
 
 
+
+
+import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { Product } from './product.entity';
+
 @Injectable()
 export class ProductService {
-  private products = [
-    { id: 1, title: 'Harry Potter', price: 5.99, currency: 'GBP', categoryId: 2, sourceId: 'HP1', sourceUrl: 'https://example.com/hp1', imageUrl: '' },
-    { id: 2, title: 'Hobbit', price: 4.99, currency: 'GBP', categoryId: 3, sourceId: 'HOB1', sourceUrl: 'https://example.com/hobbit', imageUrl: '' },
-  ];
+  constructor(
+    @InjectRepository(Product)
+    private readonly productRepo: Repository<Product>,
+  ) {}
 
-  findByCategory(categoryId: number) {
-    return this.products.filter(p => p.categoryId === categoryId);
+  findAll() {
+    return this.productRepo.find({ relations: ['category', 'detail', 'reviews'] });
+  }
+
+  findByCategory(catId: number) {
+    return this.productRepo.find({ where: { category: { id: catId } }, relations: ['detail', 'reviews'] });
   }
 
   findOne(id: number) {
-    return this.products.find(p => p.id === id);
-  }
-
-    refreshProduct(productId: number) {
-    return { message: `Refresh product ${productId}` };
+    return this.productRepo.findOne({ where: { id }, relations: ['detail', 'reviews'] });
   }
 }

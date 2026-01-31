@@ -1,7 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 import { Category } from '../category/category.entity';
 
-@Entity('navigation')
+@Entity()
 export class Navigation {
   @PrimaryGeneratedColumn()
   id: number;
@@ -9,12 +9,12 @@ export class Navigation {
   @Column()
   title: string;
 
-  @Column()
+  @Column({ unique: true })
   slug: string;
 
-  @Column({ type: 'timestamp', nullable: true })
+  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   lastScrapedAt: Date;
 
-  @OneToMany(() => Category, category => category.navigation)
+  @OneToMany(() => Category, (category) => category.navigation)
   categories: Category[];
 }

@@ -1,28 +1,23 @@
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
 import { Product } from '../product/product.entity';
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, CreateDateColumn, JoinColumn } from 'typeorm';
 
-
-@Entity('review')
+@Entity()
 export class Review {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
-  productId: number;
+  @ManyToOne(() => Product, product => product.reviews, { nullable: false })
+  product: Product;
 
   @Column()
   author: string;
 
-  @Column('decimal')
+  @Column('int')
   rating: number;
 
   @Column('text')
   text: string;
 
-  @CreateDateColumn()
+  @Column({ type: 'timestamptz', default: () => 'CURRENT_TIMESTAMP' })
   createdAt: Date;
-
-  @ManyToOne(() => Product, product => product.reviews, { onDelete: 'CASCADE' })
-  @JoinColumn({ name: 'productId' })
-  product: Product;
 }

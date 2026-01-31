@@ -1,35 +1,24 @@
-// import { Controller, Get, Param, Post, Query } from '@nestjs/common';
+// import { Controller, Get, Post, Param, Body, ParseIntPipe } from '@nestjs/common';
 // import { ProductService } from './product.service';
+// import { Product } from './product.entity';
 
-import { Controller, Get, Param, Post } from "@nestjs/common";
-import { ProductService } from "./product.service";
-
-// @Controller()
+// @Controller('product')
 // export class ProductController {
-//   constructor(private readonly productService: ProductService) {}
+//   constructor(private prodService: ProductService) {}
 
-//   @Get('categories/:id/products')
-//   findByCategory(
-//     @Param('id') id: number,
-//     @Query('limit') limit = 10,
-//     @Query('page') page = 1,
-//   ) {
-//     return this.productService.findByCategory(id, +limit, +page);
+//   @Get()
+//   findAll(): Promise<Product[]> {
+//     return this.prodService.findAll();
 //   }
 
-//   @Post('categories/:id/products/refresh')
-//   refreshCategoryProducts(@Param('id') id: number) {
-//     return this.productService.refreshCategory(id);
+//   @Get(':id')
+//   findOne(@Param('id', ParseIntPipe) id: number): Promise<Product | null> {
+//     return this.prodService.findOne(id);
 //   }
 
-//   @Get('products/:id')
-//   findOne(@Param('id') id: number) {
-//     return this.productService.findOne(id);
-//   }
-
-//   @Post('products/:id/refresh')
-//   refreshProduct(@Param('id') id: number) {
-//     return this.productService.refreshProduct(id);
+//   @Post()
+//   create(@Body() body: any): Promise<Product> {
+//     return this.prodService.create(body);
 //   }
 // }
 
@@ -39,23 +28,25 @@ import { ProductService } from "./product.service";
 
 
 
+import { Controller, Get, Param } from '@nestjs/common';
+import { ProductService } from './product.service';
 
 @Controller('products')
 export class ProductController {
   constructor(private readonly productService: ProductService) {}
 
-  @Get('category/:categoryId')
-  getProductsByCategory(@Param('categoryId') categoryId: number) {
-    return this.productService.findByCategory(+categoryId);
+  @Get()
+  getAll() {
+    return this.productService.findAll();
+  }
+
+  @Get('category/:catId')
+  getByCategory(@Param('catId') catId: string) {
+    return this.productService.findByCategory(+catId);
   }
 
   @Get(':id')
-  getProduct(@Param('id') id: number) {
+  getOne(@Param('id') id: string) {
     return this.productService.findOne(+id);
-  }
-
-    @Post(':id/refresh')
-  refreshProduct(@Param('id') id: number) {
-    return this.productService.refreshProduct(id);
   }
 }

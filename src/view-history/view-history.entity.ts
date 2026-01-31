@@ -1,6 +1,6 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn } from 'typeorm';
 
-@Entity('view_history')
+@Entity()
 export class ViewHistory {
   @PrimaryGeneratedColumn()
   id: number;
@@ -11,8 +11,8 @@ export class ViewHistory {
   @Column()
   sessionId: string;
 
-  @Column('jsonb')
-  pathJson: string[];
+  @Column({ type: 'jsonb' })
+  pathJson: any;
 
   @CreateDateColumn()
   createdAt: Date;
